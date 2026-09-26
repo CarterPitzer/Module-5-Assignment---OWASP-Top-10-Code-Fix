@@ -1,0 +1,31 @@
+import requests
+from urllib.parse import urlparse
+
+ALLOWED_HOSTS = {"example.com", "api.example.com"}
+
+def safe_fetch(url: str):
+    parsed = urlparse(url)
+
+    if parsed.scheme not in ("http", "https"):
+        raise ValueError("Invalid scheme")
+
+    host = parsed.hostname
+    if host not in ALLOWED_HOSTS:
+        raise ValueError("Host not allowed")
+
+    response = requests.get(url, timeout=5)
+    return response.text
+
+if __name__ == "__main__":
+    user_input = input("Enter URL: ")
+    try:
+        print(safe_fetch(user_input))
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+flaw
+The server fetches any URL the user provides. 
+
+why this fixes
+Only allows requests to known safe domains.
