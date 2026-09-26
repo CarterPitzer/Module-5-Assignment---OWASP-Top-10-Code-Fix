@@ -1,0 +1,13 @@
+<script
+  src="https://cdn.example.com/lib.js"
+  integrity="sha384-BASE64_ENCODED_HASH_HERE"
+  crossorigin="anonymous">
+</script>
+
+
+flaw
+The app blindly trusts external JavaScript.
+
+
+why this fixes
+If the file is modified, the hash won’t match and the script won’t load.
