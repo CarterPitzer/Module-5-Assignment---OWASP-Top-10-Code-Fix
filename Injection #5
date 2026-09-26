@@ -1,0 +1,12 @@
+String username = request.getParameter("username");
+String query = "SELECT * FROM users WHERE username = ?";
+PreparedStatement pstmt = connection.prepareStatement(query);
+pstmt.setString(1, username);
+ResultSet rs = pstmt.executeQuery();
+
+
+Flaw
+User input (username) is concatenated directly into SQL. 
+
+Why this fixes
+Prevents attackers from changing the structure of the query.
