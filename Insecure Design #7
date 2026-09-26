@@ -1,0 +1,41 @@
+from itsdangerous import URLSafeTimedSerializer
+from werkzeug.security import generate_password_hash
+from flask import request, url_for
+
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+
+@app.route('/request-reset', methods=['POST'])
+def request_reset():
+    email = request.form['email']
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return 'If that account exists, a reset email has been sent.', 200
+
+    token = serializer.dumps(user.email, salt='password-reset')
+    reset_link = url_for('reset_password', token=token, _external=True)
+    # send reset_link via email (omitted)
+    return 'If that account exists, a reset email has been sent.', 200
+
+@app.route('/reset-password/<token>', methods=['POST'])
+def reset_password(token):
+    try:
+        email = serializer.loads(token, salt='password-reset', max_age=3600)
+    except Exception:
+        return 'Invalid or expired token', 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return 'Invalid token', 400
+
+    new_password = request.form['new_password']
+    user.password = generate_password_hash(new_password)
+    db.session.commit()
+    return 'Password reset'
+
+
+flaw
+Anyone who knows an email can reset the password—no token, no verification.
+
+why this fixes
+Requires possession of the email inbox (reset link) to change the password.
+
