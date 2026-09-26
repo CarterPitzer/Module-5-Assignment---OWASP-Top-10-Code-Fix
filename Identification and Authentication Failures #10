@@ -1,0 +1,15 @@
+import org.mindrot.jbcrypt.BCrypt;
+
+public boolean authenticate(String inputPassword, User user) {
+    String storedHash = user.getPasswordHash(); // bcrypt hash
+    return BCrypt.checkpw(inputPassword, storedHash);
+}
+
+
+flaw
+This suggests passwords are stored in plaintext and compared directly. 
+
+why this fixes
+Stores passwords as bcrypt hashes, not plaintext.
+
+Uses a library to verify passwords safely.
