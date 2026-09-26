@@ -18,6 +18,9 @@ app.get('/profile/:userId', (req, res) => {
 
 
 
+flaw
+This route trusts req.params.userId from the URL and returns that user’s data without checking whether the logged‑in user is allowed to see it.
+
 why it fixes
 Requires authentication
 Ensures the requested profile belongs to the current user.
