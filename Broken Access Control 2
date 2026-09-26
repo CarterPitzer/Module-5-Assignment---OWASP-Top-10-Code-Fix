@@ -16,6 +16,10 @@ def get_account(user_id):
     return jsonify(user.to_dict())
 
 
+flaw
+Any user can access any account by guessing or iterating IDs.
+
+
 Why this fixes
 Checks ownership or admin role before returning data.
 Stops users from accessing other users’ accounts.
