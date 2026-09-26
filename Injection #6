@@ -1,0 +1,26 @@
+const Joi = require('joi');
+
+const usernameSchema = Joi.string().alphanum().min(3).max(30).required();
+
+app.get('/user', async (req, res) => {
+    const { error, value } = usernameSchema.validate(req.query.username);
+    if (error) {
+        return res.status(400).json({ error: 'Invalid username' });
+    }
+
+    try {
+        const user = await db.collection('users').findOne({ username: value });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
+
+flaw
+ There is no validation or restriction on the shape of req.query.username.
+
+why this fixes
+Ensures the query is a basic equality match, not a complex operator injection.
