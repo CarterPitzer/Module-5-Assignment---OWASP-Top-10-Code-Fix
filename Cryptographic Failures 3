@@ -21,6 +21,10 @@ public class PasswordHasher {
     }
 }
 
+flaws
+No salt, so identical passwords produce identical hashes and are vulnerable to rainbow‑table attacks.
+
+
 
 Why this fixes
 Adds a random salt per password to defeat rainbow tables.
