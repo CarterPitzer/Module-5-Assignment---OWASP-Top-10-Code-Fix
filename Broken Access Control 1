@@ -1,0 +1,23 @@
+app.get('/profile/:userId', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const currentUserId = req.user.id;
+
+    if (req.params.userId !== currentUserId) {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    User.findById(currentUserId, (err, user) => {
+        if (err) return res.status(500).send(err);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        res.json(user);
+    });
+});
+
+
+
+why it fixes
+Requires authentication
+Ensures the requested profile belongs to the current user.
